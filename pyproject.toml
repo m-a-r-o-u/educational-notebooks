@@ -7,7 +7,10 @@ name = "educational-notebooks"
 version = "0.1.0"
 description = "A collection of educational Jupyter notebooks"
 requires-python = ">=3.10"
-dependencies = ["nbformat>=5.10"]
+dependencies = [
+    "datasets>=3.0",
+    "nbformat>=5.10",
+]
 
 [tool.setuptools]
 packages = []
