@@ -17,6 +17,7 @@ END_MARKER = "<!-- NOTEBOOK_TABLE_END -->"
 FIELDS = ("Description", "Level", "Tags")
 GITHUB_REPOSITORY = "m-a-r-o-u/educational-notebooks"
 DEFAULT_BRANCH = "main"
+GITHUB_BASE_URL = "https://github.com"
 COLAB_BASE_URL = "https://colab.research.google.com/github"
 
 
@@ -73,7 +74,10 @@ def notebook_rows() -> list[dict[str, str]]:
             {
                 "category": category,
                 "topic": topic_from(markdown, path),
-                "link": notebook_path,
+                "github_link": (
+                    f"{GITHUB_BASE_URL}/{GITHUB_REPOSITORY}/blob/"
+                    f"{DEFAULT_BRANCH}/{notebook_path}"
+                ),
                 "colab_link": (
                     f"{COLAB_BASE_URL}/{GITHUB_REPOSITORY}/blob/"
                     f"{DEFAULT_BRANCH}/{notebook_path}"
@@ -95,7 +99,7 @@ def render_table(rows: list[dict[str, str]]) -> str:
         values = (
             table_cell(row["category"]),
             table_cell(row["topic"]),
-            f'[Open]({row["link"]}) · [Open in Colab]({row["colab_link"]})',
+            f'[GitHub]({row["github_link"]}) or [Colab]({row["colab_link"]})',
             table_cell(row["level"]),
             table_cell(row["description"]),
             table_cell(row["tags"]),
