@@ -15,6 +15,9 @@ README_PATH = ROOT / "README.md"
 START_MARKER = "<!-- NOTEBOOK_TABLE_START -->"
 END_MARKER = "<!-- NOTEBOOK_TABLE_END -->"
 FIELDS = ("Description", "Level", "Tags")
+GITHUB_REPOSITORY = "m-a-r-o-u/educational-notebooks"
+DEFAULT_BRANCH = "main"
+COLAB_BASE_URL = "https://colab.research.google.com/github"
 
 
 def first_markdown_cell(notebook: nbformat.NotebookNode) -> str:
@@ -65,11 +68,16 @@ def notebook_rows() -> list[dict[str, str]]:
         notebook = nbformat.read(path, as_version=4)
         markdown = first_markdown_cell(notebook)
         metadata = metadata_from(markdown)
+        notebook_path = quote(relative.as_posix(), safe="/")
         rows.append(
             {
                 "category": category,
                 "topic": topic_from(markdown, path),
-                "link": quote(relative.as_posix(), safe="/"),
+                "link": notebook_path,
+                "colab_link": (
+                    f"{COLAB_BASE_URL}/{GITHUB_REPOSITORY}/blob/"
+                    f"{DEFAULT_BRANCH}/{notebook_path}"
+                ),
                 **{field.lower(): value for field, value in metadata.items()},
             }
         )
@@ -87,7 +95,7 @@ def render_table(rows: list[dict[str, str]]) -> str:
         values = (
             table_cell(row["category"]),
             table_cell(row["topic"]),
-            f'[Open]({row["link"]})',
+            f'[Open]({row["link"]}) · [Open in Colab]({row["colab_link"]})',
             table_cell(row["level"]),
             table_cell(row["description"]),
             table_cell(row["tags"]),
