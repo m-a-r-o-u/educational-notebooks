@@ -12,6 +12,7 @@ dependencies = [
     "matplotlib>=3.8",
     "nbformat>=5.10",
     "numpy>=2.0",
+    "torch>=2.3",
 ]
 
 [tool.setuptools]
